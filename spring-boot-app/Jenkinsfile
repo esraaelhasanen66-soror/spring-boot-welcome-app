@@ -40,18 +40,25 @@ pipeline {
         DOCKER_IMAGE = "esraaelhasanen/ultimate-cicd:${BUILD_NUMBER}"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('dockerhub-pass')
-      }
+       }
       steps {
         script {
             sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
-            def dockerImage = docker.image("${DOCKER_IMAGE}")
-            docker.withRegistry('https://hub.docker.com', "${REGISTRY_CREDENTIALS}") {
-                dockerImage.push()
-            }
-            //hub.docker.com
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-pass',variable: 'dockerhub_password' )]) {
+                        sh 'echo "$dockerhub_password" | docker login -u esraaelhasanen --password-stdin'
+                }
+                }
+            sh 'docker push ${DOCKER_IMAGE}'
         }
-      }
     }
+           // def dockerImage = docker.image("${DOCKER_IMAGE}")
+           // docker.withRegistry('https://hub.docker.com', "${REGISTRY_CREDENTIALS}") {
+           //     dockerImage.push()
+          //  }
+            //hub.docker.com
+        
+      
+    
     stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "spring-boot-welcome-app"
