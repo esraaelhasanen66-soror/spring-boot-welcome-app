@@ -52,6 +52,7 @@ pipeline {
             sh 'echo "REMIvMdHU9It^rq^"| docker login -u esraaelhasanen --password-stdin'
             sh 'docker push ${DOCKER_IMAGE}'
         }
+     }
     }
            // def dockerImage = docker.image("${DOCKER_IMAGE}")
            // docker.withRegistry('https://hub.docker.com', "${REGISTRY_CREDENTIALS}") {
