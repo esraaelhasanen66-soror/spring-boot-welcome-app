@@ -23,18 +23,18 @@ pipeline {
 
       }
     }
-    stage('Static Code Analysis') {
-      environment {
-        SONAR_URL = "http://99.79.38.23:9000"
-        SONAR_TOKEN = "sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0" 
-      }
-      steps {
-        withCredentials([string(credentialsId: 'sonarqube-token	', variable: 'SONAR_AUTH_TOKEN')]) {
-          //sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-          sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0 -Dsonar.host.url=http://99.79.38.23:9000'
-        }
-      }
-    }
+    // stage('Static Code Analysis') {
+    //   environment {
+    //     SONAR_URL = "http://99.79.38.23:9000"
+    //     SONAR_TOKEN = "sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0" 
+    //   }
+    //   steps {
+    //     withCredentials([string(credentialsId: 'sonarqube-token	', variable: 'SONAR_AUTH_TOKEN')]) {
+    //       //sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+    //       sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0 -Dsonar.host.url=http://99.79.38.23:9000'
+    //     }
+    //   }
+    // }
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "esraaelhasanen/ultimate-cicd:${BUILD_NUMBER}"
