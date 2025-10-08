@@ -29,7 +29,7 @@ pipeline {
     //     SONAR_TOKEN = "sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0" 
     //   }
     //   steps {
-    //     withCredentials([string(credentialsId: 'sonarqube-token	', variable: 'SONAR_AUTH_TOKEN')]) {
+    //     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
     //       //sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
     //       sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0 -Dsonar.host.url=http://99.79.38.23:9000'
     //     }
@@ -44,12 +44,11 @@ pipeline {
       steps {
         script {
             sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
-            //withCredentials([usernamePassword(credentialsId: 'dockerhub-pass',variable: 'dockerhub_password' )]) {
-                      //  sh 'echo "${dockerhub_password}" | docker login -u esraaelhasanen --password-stdin'
-                //}
+            withCredentials([string(credentialsId: 'dockerhub-pass',variable: 'dockerhub_password' )]) {
+                        sh 'echo "${dockerhub_password}" | docker login -u esraaelhasanen --password-stdin'
+            }
                // }
             
-            sh 'echo "REMIvMdHU9It^rq^"| docker login -u esraaelhasanen --password-stdin'
             sh 'docker push ${DOCKER_IMAGE}'
         }
      }
@@ -73,7 +72,7 @@ pipeline {
                     git config user.email "esraa.elhasanen66@gmail.com"
                     git config user.name "esraaelhasanen66-soror"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml
+                    sed -i "s/ultimate-cicd:*/ultimate-cicd:${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml
                     git add spring-boot-app-manifests/deployment.yml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
@@ -83,3 +82,5 @@ pipeline {
     }
   }
 }
+
+//                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml
