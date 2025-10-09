@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'esraaelhasanen/dind-maven:1.0.0'
-      args '--privileged -u root -v /var/lib/docker' // mount Docker socket to access the host's Docker daemon
+      args '--privileged  -v /var/lib/docker' // mount Docker socket to access the host's Docker daemon
     }
   }
   stages {
@@ -39,9 +39,14 @@ pipeline {
         DOCKER_IMAGE = "esraaelhasanen/ultimate-cicd:${BUILD_NUMBER}"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('dockerhub-pass')
+        HOME = '/tmp'
+
        }
       steps {
         script {
+            sh 'pwd'
+            sh 'echo No'
+            sh 'pwd'
             sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} -f Dockerfile .'
             withCredentials([string(credentialsId: 'dockerhub-pass',variable: 'dockerhub_password' )]) {
                         sh 'echo "${dockerhub_password}" | docker login -u esraaelhasanen --password-stdin'
