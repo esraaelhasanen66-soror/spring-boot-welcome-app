@@ -24,7 +24,7 @@ pipeline {
     }
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = "http://15.157.70.249:9000"
+        SONAR_URL = "http://15.223.200.238:9000"
         SONAR_TOKEN = "sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0" 
       }
       steps {
