@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'esraaelhasanen/dind-maven:1.0.0'
-      args '--privileged -v /var/lib/docker' // mount Docker socket to access the host's Docker daemon
+      args '--privileged -u root -v /var/lib/docker' // mount Docker socket to access the host's Docker daemon
     }
   }
   stages {
