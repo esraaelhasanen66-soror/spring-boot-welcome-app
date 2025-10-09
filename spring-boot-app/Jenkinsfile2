@@ -30,7 +30,7 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
           //sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-          sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=sqa_784b4e777ae485c55e73dc3a6a61a83552dfd1d0 -Dsonar.host.url=http://15.157.70.249:9000'
+          sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=$SONAR_URL'
         }
       }
     }
@@ -42,7 +42,7 @@ pipeline {
        }
       steps {
         script {
-            sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+            sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} -f Dockerfile .'
             withCredentials([string(credentialsId: 'dockerhub-pass',variable: 'dockerhub_password' )]) {
                         sh 'echo "${dockerhub_password}" | docker login -u esraaelhasanen --password-stdin'
             }
